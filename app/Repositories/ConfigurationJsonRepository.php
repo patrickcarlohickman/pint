@@ -50,6 +50,16 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Get the custom fixers options.
+     *
+     * @return array<int, class-string>
+     */
+    public function customFixers()
+    {
+        return $this->get()['custom-fixers'] ?? [];
+    }
+
+    /**
      * Get the cache file location.
      *
      * @return string|null
