@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Contracts\PathsRepository;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Repositories\CustomFixersRepository;
 use App\Repositories\GitPathsRepository;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,6 +36,14 @@ class RepositoriesServiceProvider extends ServiceProvider
             return new ConfigurationJsonRepository(
                 $input->getOption('no-config') ? null : $config,
                 $input->getOption('preset'),
+            );
+        });
+
+        $this->app->singleton(CustomFixersRepository::class, function () {
+            $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
+            return new CustomFixersRepository(
+                $localConfiguration->customFixers()
             );
         });
 
