@@ -3,6 +3,7 @@
 namespace App\Factories;
 
 use App\Repositories\ConfigurationJsonRepository;
+use App\Repositories\CustomFixersRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
@@ -43,6 +44,7 @@ class ConfigurationFactory
     {
         return (new Config())
             ->setFinder(self::finder())
+            ->registerCustomFixers(resolve(CustomFixersRepository::class)->resolved())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
             ->setUsingCache(true);
