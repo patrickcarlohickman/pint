@@ -80,9 +80,13 @@ class CustomFixersRepository
             return false;
         }
 
-        // If the project is pint itself, the autoloader is already registered and
-        // can't be included again. When run as a PHAR, the autoload paths will
-        // not match, so the contents of the files are checked instead.
+        // If the project is pint itself, the autoloader is already registered. If left
+        // unguarded, the autoloader will get unregistered when run from source, or
+        // the autoloader will get redeclared (fatal) when run from a PHAR file.
+        //
+        // When run from source, the autoloader paths will match, so the require_once()
+        // will prevent the redeclaration, but it will still get unregistered. When
+        // run as a PHAR file, the paths are different, so it will be redeclared.
         if (file_exists($pintAutoloadPath) && md5_file($pintAutoloadPath) === md5_file($projectAutoloadPath)) {
             return false;
         }
